@@ -1,0 +1,81 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Internationalization}
+
+\subsection{Definition}
+\textbf{Internationalization:} Programmierung, so dass Lokalisierung möglich ist \\
+\textbf{Lokal-/Globalisierung:} Sprachliche und andereweitige Anpassung an Notwendigkeit einer Sprachregion.\\
+\textbf{Translation:} Übersetzung von Texten oder Textfragmenten\\
+\textbf{Locale:} String der eine Sprachregion bestimmt $\rightarrow$ de-CH, de-AT, ...
+\subsubsection{Herausforderung}
+\begin{itemize}
+    \item  Andere Alphabete und Zahlen
+    \item  Anpassung Artikel + Adjektive, Pluralbildung
+    \item  Andere Farbsymbolik
+    \item  Nicht das Konzept von Vorname / Nachname
+    \item  Andere Höflichkeitsformen (Sie, Titel, ...)
+\end{itemize}
+\textbf{Schwierigkeit:} Westeuropa < Osteuropa < Kyrillische < Indische < Arabisch/Hebräisch < Asiatische
+
+
+\subsection{Tools}
+\subsubsection{Intl.Collator}
+Sprachsensitiver Stringvergleich
+\begin{lstlisting}
+const compareGerman = new Intl.Collator('de').compare('ae', 'z');
+\end{lstlisting}
+
+\subsubsection{Intl.DateTimeFormat}
+Datum und Zeiten sprachsensitiv formatieren
+\begin{lstlisting}
+const date = new Date(Date.UTC(2019, 11, 16, 15, 30, 0));
+console.log(new Intl.DateTimeFormat('en-US').format(date));
+\end{lstlisting}
+
+\subsubsection{Intl.ListFormat}
+Aufzählungen (und/oder verknüpft) sprachsensitiv formatieren
+\begin{lstlisting}
+const formatterEn = new Intl.ListFormat('en', {
+style: 'long', type: 'conjunction'});
+console.log(formatterEn.format(colorsEn));
+\end{lstlisting}
+
+\subsubsection{Intl.NumberFormat}
+Zahlen sprachsensitiv formatieren
+\begin{lstlisting}
+const  number = 123456.789;
+console.log(new Intl.NumberFormat('de-CH').format(number));
+// 123'456.789
+\end{lstlisting}
+
+\subsubsection{Intl.PluralRules}
+Mit Pluralregeln pluralsensitiv interpolieren
+\begin{lstlisting}
+function makeOrdinal(n, locale = 'en') {
+const pr = new Intl.PluralRules(locale, {
+type: 'ordinal' });
+const messages = {
+en: {
+one: 'st', two: 'nd', few: 'rd', other: 'th'},
+de: {
+one: 'te', two: 'te', few: 'te', other: 'te' }};
+return `${n}${messages[locale][pr.select(n)]}`;}
+\end{lstlisting}
+
+\subsubsection{Intl.RelativeTimeFormat}
+Relative Zeitangaben sprachsensitiv formatieren
+\begin{lstlisting}
+const rtf1 = new Intl.RelativeTimeFormat("en", {
+localeMatcher: "best fit", // other values: "lookup"
+numeric: "always", // other values: "auto"
+style: "long", // other values: "short" or "narrow" });
+console.log(rtf1.format(-1, 'day')); //expected output: "1 day ago"
+\end{lstlisting}
+
+
+
+\vfill
+
+
+\columnbreak

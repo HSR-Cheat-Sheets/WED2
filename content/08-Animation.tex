@@ -1,0 +1,92 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Animation}
+% die vermittelte Heuristik anwenden um zu bestimmen ob ein CSS-Property animierbar ist.
+
+\textbf{Animierbar:} length, number, color, calc()\\
+\textbf{Nicht Animierbar:} border-style, display, etc.
+
+\subsection{Transition Properties}
+% Animationen mit CSS-Transition-Properties (transition-* und transition) definieren, sowie Fehler in vorgegebenen CSS Regel mit Transition-Properties erklären und korrigieren.
+
+% die Unterschiede der wichtigsten Werte des Properties transition-timing-function (linear, ease- in, ease-out, ease-in-out) erklären und einer entsprechenden Visualisierung des Animationsablaufes zuordnen.
+
+\begin{itemize}
+    \item \texttt{transition:}\\
+    Welches CSS Property
+    \begin{itemize}
+        \item \texttt{background-color/transform/all/none/}
+    \end{itemize}
+    \item \texttt{transition-duration:}\\
+    Wie lange es gehen soll [s]
+    \begin{itemize}
+        \item \texttt{3s}
+    \end{itemize}
+    \item \texttt{transition-timing-function:}\\
+    Beschleunigung der Animation
+    \begin{itemize}
+        \item \texttt{ease} (Default) startet und endet langsam
+        \item \texttt{linear} konstant
+        \item \texttt{ease-in} exponentiell
+        \item \texttt{ease-out} logarithmisch
+        \item \texttt{ease-in-out} wie ease, nur langsamerer start
+    \end{itemize}
+    \item \texttt{transition-delay:}\\
+    Pause vor Start der Animation [s]
+    \begin{itemize}
+        \item \texttt{0.2s}
+    \end{itemize}
+\end{itemize}
+\begin{lstlisting}
+.beispiel {
+    color: white;
+    background-color: blue;
+    transition: background-color .3s ease-in-out 0.2s,
+                color 2s ease-in, ; }
+\end{lstlisting}
+
+\subsection{Transform}
+% vorhersagen wie sich CSS transform definitionen (rotate(), rotateX(), rotateY(), translate(), translateX(), translateY(), scale(), scaleX(), scaleY(), skew(), skewX(), skewY(), none) in Kombination mit unterschiedlichen transform-origin Werten (z.B. left, center, right, top) auf die Darstellung eines HTML Elementes auswirken.
+Bewegen eines Elementes\\
+\textbf{Values:} rotate(-10deg), rotateX(), rotateY(),  translate()[verschieben], translateX(), translateY(), scale()[vergrössern], scaleX(), scaleY(), skew()[verziehen], skewX(), skewY(), none
+\subsubsection{Transform origin}
+Drehen um eine bestimmte Achse\\
+\textbf{Values:} Percentage, length, left, center, right, top, bottom\\
+\texttt{transform-origin: 100\% 100\%} $\rightarrow$ unten rechts\\
+\texttt{transform-origin: 0\% 0\%} $\rightarrow$ oben links
+
+\begin{lstlisting}
+img {
+    transition: transform 1s; }
+
+img:hover {
+    transform: rotate(10deg) translate(50px) scale(1.2);
+    transform-origin: 100% 100% }
+\end{lstlisting}
+
+\subsection{Keyframe Animation}
+% vorhersagen wie sich eine einfache, mittels einer @keyframe Regel beschriebenen Animation abläuft.
+\begin{lstlisting}
+#magic {
+animation-name: rainbow;
+animation-duration: 5s;
+animation-timing-function: linear;
+animation-iteration-count: infinite;
+animation-direction: alternate; }
+
+@keyframes rainbow {
+0% { background-color: red; }
+20% { background-color: orange; }
+40% { background-color: yellow; }
+... }
+\end{lstlisting}
+
+
+% erklären warum es nötig sein kann ein mit einer @property Definition einen Wertebereich für CSS- Custom Property zu definieren. -> color gradient does not work
+
+% erklären warum die Animation des opacity-Properties gut geeignet ist für Fade-In und Fade-Out Animationen, aber zusätzliche Vorkehrungen getroffen werden müssen um die Accessibility sicher zu stellen. -> screenreader
+
+% erklären warum CSS-Animationen JS-basierten Animationen vorzuziehen sind -> performance
+
+\vfill

@@ -1,0 +1,47 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Node JS}
+
+\subsubsection{Event-driven, Non-blocking}
+%kennen den Unterschied zwischen klassischen und event-driven Web Services.
+Problem single Thread soll gelösst werden.\\
+Nur 1 ''Arbeiter'' $\rightarrow$ gibt Anfrage weiter an z.B. FS und soll antwort senden, sobald fertig. Arbeiter nun frei für weitere Anfragen.
+
+\subsubsection{Request \& Response}
+\textbf{Request:} GET, PUT, POST, \dots\\
+\textbf{Reponse:} writeHead, setHeader, statusCode, statusMessage, write, end
+\begin{lstlisting}
+response.writeHead(200, {'Content-Length': body.length, 'Content-Type': 'text/plain'});
+response.setHeader("Content-Type", "text/html");
+response.statusCode = 404; response.statusMessage = ''Not found'';
+response.write("Data");
+response.end("Data");
+\end{lstlisting}
+
+
+\subsubsection{Module}
+Node verwendet für die Module Verwaltung npm
+\begin{lstlisting}
+export router; // Variable
+import router from "./file.js";
+export {function, otherFunction};
+export const noteService = new NoteService();
+import {noteService} from "./noteServices.js";
+import express from "express"; // ES6
+\end{lstlisting}
+\subsubsection{package.json}
+\begin{itemize}
+    \item Beinhaltet die Informationen zum Projekt
+    \item Wird benötigt um es zu publishen
+    \item Wird benötigt um Module zu installieren
+\end{itemize}
+
+
+
+
+%verstehen den Unterschied zwischem Server und Client JavaScript Code.
+%können die Konzepte von Node.js anwenden.
+%können mit dem Online API von Node.js umgehen.
+%können mit Node.js einen rudimentären Server implementieren.
+

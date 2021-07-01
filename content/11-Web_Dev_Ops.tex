@@ -1,0 +1,102 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Web Dev-Ops}
+
+
+\subsection{Sass (Syntactically Awesome Style Sheets)}
+CSS Präprozessoren sind nicht an die Limitationen von CSS gebunden und ermöglichen es uns dadurch, (potentiell) besser wartbaren Code zu schreiben. $\rightarrow$  Weniger Copy \& Paste, Modularisierung, Wiederverwenden von Funktionalitäten.
+
+\subsubsection{SASS vs. SCSS}
+2 unterschiedliche Arten von Syntax:
+\begin{itemize}
+    \item SASS nur mit einrücken
+    \item SCSS mit \texttt{;} und \texttt{\{\}}
+\end{itemize}
+
+\subsubsection{Variablen}
+\begin{lstlisting}
+$purpele-navy: #635380; /* definition */
+body {
+color: $purpele-navy;}  /* Anwendung */
+\end{lstlisting}
+
+\subsubsection{Nesting}
+\begin{lstlisting}
+nav {                   /* SASS */
+  ul {
+    margin: 0;
+      > li {
+        display: inline-block; }}}} /* SASS */
+nav ul {                /* wird zu CSS */
+    margin: 0; }
+nav ul > li {           /* wird zu CSS */
+display: inline-block; }
+\end{lstlisting}
+
+\subsubsection{Mixins}
+Ermöglichen das Wiederverwenden von CSS
+\texttt{@mixin <name> (<param>*) \{<scss snippet>\}}
+\texttt{@include} lädt Mixin (mehrere möglich)
+\begin{lstlisting}
+@mixin visuallyhidden() {   /* create */
+    border: 0;}
+.element {                  /* use */
+@include visuallyhidden;}
+\end{lstlisting}
+
+\subsubsection{Extends / Inheritance}
+\begin{itemize}
+    \item gleicher Effekt wie mit Mixins
+    \item Mixins generiert CSS mit mehr Redundanz
+\end{itemize}
+\begin{lstlisting}
+.icon {
+    transition: background-color ease .2s;
+.error-icon {
+    @extend .icon;
+    /* error specific styles... */ }
+
+.icon, .error-icon {
+transition: background-color ease .2s; }
+.error-icon {
+/* error specific styles... */ }
+\end{lstlisting}
+Wird anstatt \texttt{.icon $\rightarrow$ \%icon} geschrieben, so ist es abstract und es wird kein \texttt{.icon} erzeugt.
+
+\subsubsection{Programmierung}
+\begin{lstlisting}
+@each $point in $breakpoints {}   /* foreach */
+@function properZero($para){      /* function */
+    @if( ... ) { @return $para / 5; }}
+@each $name, $hex in $colors {    /* Map */
+    &-#{$name} {
+color: $hex; } }
+
+\end{lstlisting}
+
+\subsubsection{Rechnen}
+\begin{tabular}{p{2cm} | l}
+    2px + 2px & $\rightarrow$ 4px\\
+    10 + px & $\rightarrow$ 10px\\
+    1px * 2 & $\rightarrow$ 2px\\
+    10px * 10px & $\rightarrow$ «Error»\\
+    (2 + px) * 2 & $\rightarrow$ «Error»\\
+    2px / 1px & $\rightarrow$ 2\\
+\end{tabular}
+
+
+\subsection{Build Tools}
+\textbf{Ziel:} Automatische Optimierung von
+\begin{itemize}
+    \item Performanz (z.B. first-contentful-paint, time-to-interative) wie sie z.B. Lighthouse
+    \item X-Browser Unterstützung
+\end{itemize}
+\textbf{Features:}
+\begin{itemize}
+    \item Code Splitting («Tree Shaking»)
+    \item X-Browser module-loading optimization
+    \item Non-JS Resource loading-optimization
+\end{itemize}
+
+\vfill

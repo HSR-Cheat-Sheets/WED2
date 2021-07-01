@@ -1,0 +1,138 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Express}
+
+
+\subsection{Middleware}
+Express nutzt Middleware für die Request Bearbeitung. Middleware ist ein Stack von Anweisungen, welche für ein Request ausgeführt wird. Mit \texttt{app.use()} wird neue Middleware hinzugefügt.
+\begin{lstlisting}
+import http from "http";
+import express from "express";
+const app = express();
+const server = http.createServer(app);
+const hostname = '127.0.0.1'; const port = '3000'; server.listen(port, hostname, () => { console.log('Running'); });
+\end{lstlisting}
+
+\subsubsection{Routing}
+Middleware befindet sich auf dem Express Objekt
+\begin{lstlisting}
+import express from "express";
+const router = express.Router;
+\end{lstlisting}
+router.METHOD(path, [callback, \dots ] callback)  (METHOD : get, put, post, delete)
+\begin{lstlisting}
+router.get('/', function(req, res) {
+res.send('hello world'); });
+\end{lstlisting}
+Path zu verschiedenen Methoden gruppieren
+\begin{lstlisting}
+app.route('/book') // oder router.route(..)
+.get(function(req, res) {res.send('Get a book');})
+.post(function(req, res) {res.send('Add book');})
+\end{lstlisting}
+
+\subsubsection{Body-Parser}
+\begin{lstlisting}
+import bodyParser from "body-parser";
+app.use(bodyParser.json());
+\end{lstlisting}
+
+\subsubsection{Static}
+Statische Files ausliefern, mehrere möglich
+\begin{lstlisting}
+app.use(express.static(__dirname + '/public'))
+\end{lstlisting}
+
+\subsubsection{Eigene Middleware}
+3 Parameter: request, response, next
+\begin{lstlisting}
+function myDummyLogger( options ){
+  options = options ? options : {};
+  return function myInnerLogger(req, res, next) {
+    console.log(req.method +":"+ req.url);
+    next(); } }
+app.use(myDummyLogger()); //Anwendung
+\end{lstlisting}
+
+\subsubsection{Error Middleware}
+\begin{itemize}
+    \item Bearbeitet Errors, welche von den Middlewares generiert wurden
+    \item Wird aufgerufen, falls Error-Objekt dem Next-Callback übergeben wird $\rightarrow$ keine normalen Middlewares mehr aufgerufen
+\end{itemize}
+\begin{lstlisting}
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');});
+\end{lstlisting}
+
+
+\subsection{Model (Daten \& Aufbereitung)}
+Die Daten sollten in einem Module (Array, JSON, DB) verwaltet und abgespeichert werden.
+
+\subsubsection{nedb}
+\begin{lstlisting}
+import Datastore from "nedb";
+const db = new Datastore({ filename: './order.db', autoload: true });
+// insert
+db.insert(order, function(err, newDoc){
+if (callback){ callback(err, newDoc); } });
+// search: findOne oder findAll
+db.findOne({ _id: id }, function (err, doc) { callback( err, doc); });
+// update
+db.update({_id: id}, {$set: {"state": "DELETED"}}, {}, function (err, doc) {
+   publicGet(id,callback); });
+\end{lstlisting}
+
+
+\subsection{View (Darstellung der Daten)}
+Express bietet eine render Methode an: app.render(view, [locals], callback). Konfiguration der Render-Engine:
+\begin{lstlisting}
+app.set('view engine', 'hbs'); //Engine
+app.set('views', __dirname + '/views'); //Path
+\end{lstlisting}
+\subsubsection{Handlebars}
+\begin{lstlisting}
+hbs.registerHelper('if_eq', function(a,b,opts){ if(a===b){ return opts.fn(this); } else{return opts.inverse(this);}
+})
+// Verwendung im HTML
+{{#if_eq state "OK"}}
+{{ else }}
+{{/ if_eq }}
+\end{lstlisting}
+
+
+
+\subsection{Session \& Cookie}
+Beim ersten Connect vom Client wird eine Session-Id erstellt und als Cookie zum Client geschickt. Session-Data wird auf dem Server abgespeichert $\rightarrow$ wiederspricht REST
+\begin{lstlisting}
+app.use(require("cookie-parser")());
+// Session benoetigt Cookies
+app.use(session({ secret: '1234567', resave: false, saveUninitialized: true}));
+\end{lstlisting}
+
+
+
+\subsection{Rest \& AJAX}
+\subsubsection{Token}
+Stateless Server: Bei jeder Anfrage muss ein Token mitgeben werden.
+\textbf{Vorteil:} Jede Anfrage kann zu einem beliebigen Server gesendet werden solange die Applikationen der Signatur vertraut. \textbf{Nachteile:} Was passiert wenn das Token / Gerät geklaut wird?
+
+
+\subsubsection{fetch}
+\begin{lstlisting}
+fetch('/login', { method: 'POST', headers: {
+ 'Content-Type': 'application/json'},
+ body: JSON.stringify({email: "admin@admin.ch",
+pwd:"123456"})}).then(function(res){console.log(res);
+\end{lstlisting}
+
+
+\subsection{Websockets}
+Klassische Model vom Request-Response hat 2 Probleme:
+Server kann keine Nachricht an den Client schicken /
+Jede Anfrage öffnete eine neue Verbindung $\rightarrow$ erschwert es real-time Apps z.B. Games\\
+\textbf{Lösung:} WebSockets ermöglicht ''bi-directional'', ''always-on'' Kommunikation
+
+
+\columnbreak

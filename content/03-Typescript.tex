@@ -1,0 +1,106 @@
+%! Author = mariuszindel
+%! Date = 24.01.21
+
+\section{Typescript}
+\subsubsection{Variablendefinition mit Basistypen}
+\begin{itemize}
+    \item Ohne Typdeklaration: Type-Inferenz wird verwendet
+    \item Variablen können explizit als any deklariert werden $\rightarrow$ beliebige Werte
+    \item Globale Variablen aus nicht TS-Files mit \texttt{declare} deklarieren
+    \item Basis-Typen: \texttt{boolean, number, string} (sowie \texttt{null} und \texttt{undefined})
+\end{itemize}
+\begin{lstlisting}
+let myNumber: number =1;
+let myString: string = 'abc';
+declare let myGlobalVar: string;
+\end{lstlisting}
+
+\subsubsection{Variablendefinition mit komplexen Typen}
+\begin{itemize}
+    \item Array, Tupels und Enums
+    \item Alternativ: String Literal Type
+    \item Bei Tupel keine Type-Inferenz!
+\end{itemize}
+\begin{lstlisting}
+let myNumArray: number[] = [1, 2, 3];
+let myTupel: [number, string] = [1, 'abcd'];
+enum StrColor {Red = "red", Green = "green"};
+let c: Color = Color.Green;
+\end{lstlisting}
+
+\subsubsection{Funktionsdeklaration}
+\begin{itemize}
+    \item Typ der Paramteter \& Rückgabewert
+    \item Mehr als eine erlaubte Signatur pro Funktion möglich
+    \item Funktionsparameter können optional sein (\texttt{?} nach Namen)
+\end{itemize}
+\begin{lstlisting}
+function add(n1: number, n2: number): number;
+function combineFunction(sn: number | string = "",
+  ns?: number): string {
+    return String(sn) + String(ns || ""); }
+\end{lstlisting}
+
+\subsubsection{Funktionen als Parameter}
+\begin{itemize}
+    \item Funktionsparameter können Funktionen sein.
+    \item Signatur dieser Parameter kann auch deklariert werden
+\end{itemize}
+\begin{lstlisting}
+function numberApp(numArray: number[],numFun: (
+prevRes: number, current: number)=>number):number{
+    return numArray.reduce(numFun); }
+let myNum2: number = numberApp([1, 2, 3, 4], add);
+\end{lstlisting}
+
+\subsubsection{Klassen}
+\begin{itemize}
+    \item Properties der Instanzen und der KLasse (static) werden im Kontext der Klasse definiert
+    \item Methoden und Properies können mit den Zusätzlichen \texttt{private, readonly} versehen
+\end{itemize}
+\begin{lstlisting}
+class Counter {
+  private _doors: number;
+  public static readonly WOOD = {
+   'oak': 80, 'pine': 20};
+ constructor({doors = 2}: {doors?: number} = {}) {
+    this._doors = doors; }
+set doors(newDoorCount: number) {
+  if (newDoorCount >= Counter.MIN_DOOR_COUNT &&
+      newDoorCount <= Counter.MAX_DOOR_COUNT) {
+        this._doors = newDoorCount; }
+  else { throw 'Counter can only have ...'; }}
+get doors() {
+    return this._doors; } }
+\end{lstlisting}
+
+\subsubsection{Interfaces}
+\begin{itemize}
+    \item Interfaces können in Deklaration von Klassen genutzt werden
+    \item Klasse darf mehr als 1 Interface implement.
+    \item Interfaces können in Deklaration von Variablen und Funktionsparam genutzt werden
+    \item Casting möglich und Structural-Typing Duck-Typing wird von TypeScript unterstützt.
+\end{itemize}
+\begin{lstlisting}
+interface IPoint {
+  readonly x: number; readonly y: number; }
+interface ILikableItem { likes?: number; }
+
+class Point implements IPoint, ILikableItem {
+constructor(public x: number, public y: number,
+description: string, public likes?:number) { super(description); } }
+\end{lstlisting}
+
+
+
+%die Vorteile der Nutzung von TypeScript in einem gegebenen Beispielkontext erklären
+
+%Typescript mit TSLint und Prettier für ihr Testat nutzen
+
+%TypeScript Code auf der Komplexitätsstufe der Übungen lesen und Vorhersagen zur Identifikation von Typenfehlern durch TypeScript machen
+
+%TypeScript Klassendefinitionen lesen und in entsprechende Klassendefinitionen in EcmaScript-2015+ (ES6+) und ES5 konvertieren.
+
+%den Unterschied von Klassen und Interfaces (und Typen) und das Konzept des “Structural Typing“ in TypeScript erklären.
+
+\columnbreak

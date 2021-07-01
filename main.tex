@@ -1,0 +1,38 @@
+%import template
+\input{./styles/template.tex}
+
+% DocInfo
+\newcommand{\SUBJECT}{}
+\newcommand{\TITLE}{Cheat Sheet WED2}
+
+\begin{document}
+
+%import front page
+% \input{./front.tex}
+
+%do multicols
+\begin{multicols*}{5}
+    \setlength{\columnseprule}{0.4pt}
+		\footnotesize
+		
+%import tableofcontents
+% \input{./tableofcontents.tex}
+
+	\input{content/01-Node.tex}
+	\input{content/02-Express.tex}
+	\input{content/04-Responsive_Design.tex}
+	\input{content/03-Typescript.tex}
+	\input{content/06-Security.tex}
+	\input{content/07-Accessability.tex}
+	\input{content/08-Animation.tex}
+	\input{content/09-UX_Research.tex}
+	\input{content/05-Testing.tex}
+	\input{content/10-Internationalization.tex}
+	\input{content/11-Web_Dev_Ops.tex}
+
+
+\end{multicols*}
+
+% \input{./appendix.tex}
+
+\end{document}
