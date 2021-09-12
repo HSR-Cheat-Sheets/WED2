@@ -18,9 +18,6 @@
         \item \texttt{background-color/transform/all/none/}
     \end{itemize}
     \item \texttt{transition-duration:} (Wie lange [s])
-    \begin{itemize}
-        \item \texttt{3s}
-    \end{itemize}
     \item \texttt{transition-timing-function:}\\
     (Beschleunigung der Animation)
     \begin{itemize}
@@ -31,9 +28,6 @@
         \item \texttt{ease-in-out} wie ease, nur langsamerer start
     \end{itemize}
     \item \texttt{transition-delay:} (Pause vor Start [s])
-    \begin{itemize}
-        \item \texttt{0.2s}
-    \end{itemize}
 \end{itemize}
 \begin{lstlisting}
 .beispiel {
@@ -43,9 +37,8 @@
                color 2s ease-in; }
 \end{lstlisting}
 
-\subsection{Transform}
+\subsection{Transform (Bewegen eines Elementes)}
 % vorhersagen wie sich CSS transform definitionen (rotate(), rotateX(), rotateY(), translate(), translateX(), translateY(), scale(), scaleX(), scaleY(), skew(), skewX(), skewY(), none) in Kombination mit unterschiedlichen transform-origin Werten (z.B. left, center, right, top) auf die Darstellung eines HTML Elementes auswirken.
-Bewegen eines Elementes\\
 \textbf{Values:} rotate(-10deg), rotateX(), rotateY(),  translate()[verschieben], translateX(), translateY(), scale()[vergrössern], scaleX(), scaleY(), skew()[verziehen], skewX(), skewY(), none
 \subsubsection{Transform origin}
 Drehen um eine bestimmte Achse\\

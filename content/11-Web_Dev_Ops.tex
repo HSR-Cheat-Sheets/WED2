@@ -14,6 +14,13 @@ CSS Präprozessoren sind nicht an die Limitationen von CSS gebunden und ermögli
     \item SCSS mit \texttt{;} und \texttt{\{\}}
 \end{itemize}
 
+\subsubsection{Spezielle Zeichen}
+\textbf{\$} Variablen /
+\textbf{\&} Referenz auf Parent Selector / \\
+\textbf{\%} Placeholder /
+\textbf{@} Steuerzeichen z.B. @if @else / 
+\textbf{\#\{\}} Value einer Variable z.B. p.\#\{\$name\} { }
+
 \subsubsection{Variablen}
 \begin{lstlisting}
 $purpele-navy: #635380; /* definition */
@@ -26,23 +33,18 @@ color: $purpele-navy;}  /* Anwendung */
 nav {                   /* SASS */
   ul {
     margin: 0;
-      > li {
-        display: inline-block; }}}} /* SASS */
-nav ul {                /* wird zu CSS */
-    margin: 0; }
-nav ul > li {           /* wird zu CSS */
-display: inline-block; }
+      > li { display: inline-block; }}}}
+nav ul { margin: 0; } /* wird zu CSS */
+nav ul > li { display: inline-block; }
 \end{lstlisting}
 
 \subsubsection{Mixins}
 Ermöglichen das Wiederverwenden von CSS
-\texttt{@mixin <name> (<param>*) \{<scss snippet>\}}
-\texttt{@include} lädt Mixin (mehrere möglich)
 \begin{lstlisting}
-@mixin visuallyhidden() {   /* create */
-    border: 0;}
+@mixin visuallyhidden($abc: 1em) {   /* create */
+    border: $abc;}
 .element {                  /* use */
-@include visuallyhidden;}
+@include visuallyhidden(5em);}
 \end{lstlisting}
 
 \subsubsection{Extends / Inheritance}
@@ -51,16 +53,13 @@ Ermöglichen das Wiederverwenden von CSS
     \item Mixins generiert CSS mit mehr Redundanz
 \end{itemize}
 \begin{lstlisting}
-.icon {
+.icon {                             /* SASS */
     transition: background-color ease .2s;
-.error-icon {
-    @extend .icon;
-    /* error specific styles... */ }
+.error-icon { @extend .icon; /* error style ... */ }
 
-.icon, .error-icon {
-transition: background-color ease .2s; }
-.error-icon {
-/* error specific styles... */ }
+.icon, .error-icon {                /* CSS */
+    transition: background-color ease .2s; }
+.error-icon { /* error style... */ }
 \end{lstlisting}
 Wird anstatt \texttt{.icon $\rightarrow$ \%icon} geschrieben, so ist es abstract und es wird kein \texttt{.icon} erzeugt.
 
@@ -76,15 +75,16 @@ color: $hex; } }
 \end{lstlisting}
 
 \subsubsection{Rechnen}
-\begin{tabular}{p{2cm} | l}
-    2px + 2px & $\rightarrow$ 4px\\
-    10 + px & $\rightarrow$ 10px\\
-    1px * 2 & $\rightarrow$ 2px\\
-    10px * 10px & $\rightarrow$ «Error»\\
-    (2 + px) * 2 & $\rightarrow$ «Error»\\
-    2px / 1px & $\rightarrow$ 2\\
+\begin{tabular}{p{1.3cm} l | p{1.3cm} l}
+    2px + 2px & 4px       &   2 * 1px & 2px\\
+    10 + px & «10px»      &   2px + 1mm & 5.7px\\
+    1px * 2 & 2px         &   2px * 0 & 0px\\
+    10px * 10px & «Error» &   10 + 0px & 10px\\
+    (2 + px) * 2 &  «Error»&   2px / 1px & 2\\
 \end{tabular}
 
+\subsection{PostCSS}
+%TODO
 
 \subsection{Build Tools}
 \textbf{Ziel:} Automatische Optimierung von
