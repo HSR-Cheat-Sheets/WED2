@@ -4,13 +4,13 @@
 \section{Security}
 
 
-\subsection{XSS}
+\subsection{S-XSS (Stored-Cross-Site- Scripting)}
 % Stored XSS
 In einem Formular von einem Benutzer eingegebene Daten werden ohne ''Escaping'' an andere Nutzer ausgeliefert.
 \textbf{Gegenmassnahmen:}
 \begin{itemize}
     \item Encoding bei der Darstellung von Input
-    \item Handlebars: {{{unescapedOutput}}}
+    \item Handlebars: \{\{\}\} statt \{\{\{\}\}\}
     \item XSS Libary: \texttt{username: xss(user.username)}
     \item Content Security Policy im Header setzen
     \item Cookies: HTTPOnly Flag wenn möglich setzen
@@ -25,7 +25,7 @@ Angreifer den Server dazu bringen, eingeschleusten Code auszuführen
     \item NICHT eval() (oder setTimeOut(), setInterval()) nutzen sondern parseInt(), JSON.parse()
     \item Im Minimum Input säubern / mittels Regex auf korrektes Format testen
     \item Globale Scopes und Variablen reduzieren.
-    \item Rechenintensive Tasks mit childprocess.spawn auslagern
+    \item Tasks mit childprocess.spawn auslagern
     \item Node NICHT als root Prozess starten
 \end{itemize}
 

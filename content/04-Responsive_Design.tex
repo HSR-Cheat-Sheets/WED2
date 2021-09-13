@@ -14,11 +14,10 @@
 \subsubsection{Media Queries}
 \begin{lstlisting}
 // Typen
-@media screen { ... }
-@media print { ... }
+@media screen { ... } /*und*/ @media print { ... }
 // Dimensionen
-@media ( [ width | min-width | max-width ] : 375px) { ... }
-@media ( [ height | min-height | max-height ] : 667px) { ... }
+@media([width|min-width|max-width] : 375px) {...}
+@media([height|min-height|max-height] : 667px) {...}
 //Zustaende
 @media (orientation: landscape) { ... }
 //Features
@@ -58,7 +57,7 @@ Mobile Geräte benötigen Viewport Meta-Tag Spezifikation, damit die Media-Query
 \end{minipage}
 \textcolor{subsectioncolor}{CSS Funktionen}
 \begin{lstlisting}
-width: calc(100vw - 5em); //100vw = 100% ViewWidth
+width: calc(100vw - 5em); // 100vw = 100% View Width
 width: min(500px, 100vW - 5em);
 width: max(400px, 100vw - 5em);
 width: clamp(400px, 100vw - 5em, 500px);
@@ -77,7 +76,7 @@ width: clamp(400px, 100vw - 5em, 500px);
 
 \subsubsection{Flexbox}
 \begin{itemize}
-    \item display: flex
+    \item display: flex in wrapper div
     \item Betrifft alle direkten Kind Elemente (Flex Items)
     \item Inline Styling nicht empfohlen
     \item Alle Flex Items können height und width definieren
@@ -90,7 +89,7 @@ Flex-Items definieren individuell wie sie mit verfügbarem Platz in der “Main-
 Flex-Container ''wrapt'' die Elemente sinnvoll\\
 flex-wrap: wrap $\rightarrow$ Ignoriert flex-shrink Definitionen der Flex-Items. Pro Zeile Verteilung entsprechend flex-grow oder justify-content\\
 \textcolor{subsectioncolor}{Flex-Order}\\
-Kann verwendet werden um die Reihenfolge der Elemente anzupassen\\
+Kann verwendet werden um die Reihenfolge der Elemente anzupassen, default = 0\\
 \textcolor{subsectioncolor}{Flex-Direction}\\
 flex-direction: row | row-reverse | column | column-reverse\\
 Ändert die Haupt-Layoutrichtung\\
@@ -99,6 +98,11 @@ Default: FlexBox-Items füllen den Platz horizontal (Main Axis) und vertikal (Cr
 \textbf{Main-Axis} Für Items: flex / Für Container: justify-content\\
 \textbf{Cross-Axis} Für Items: align-self / Für Container: align-items
 
+\begin{lstlisting}
+flex-flow: column-reverse wrap-reverse;//Exam-Exercise
+justify-content: center;
+align-content: space-between
+\end{lstlisting}
 
 \subsubsection{Grid}
 Auf Grid Container: \texttt{display: grid}\\
