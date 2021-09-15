@@ -8,11 +8,12 @@
     \item Variablen können explizit als any deklariert werden $\rightarrow$ beliebige Werte
     \item Globale Variablen aus nicht TS-Files mit \texttt{declare} deklarieren
     \item Basis-Typen: \texttt{boolean, number, string} (sowie \texttt{null} und \texttt{undefined})
+    \item Strict Checking Mode: Basistypen number, boolen etc. erlauben nicht mehr null \& undefined
 \end{itemize}
 \begin{lstlisting}
-let myNumber: number =1;
+let myNumber: number = 1;
 let myString: string = 'abc';
-declare let myGlobalVar: string;
+declare let myGlobalVar: any;
 \end{lstlisting}
 
 \subsubsection{Variablendefinition mit komplexen Typen}
@@ -59,19 +60,20 @@ let myNum2: number = numberApp([1, 2, 3, 4], add);
     \item Methoden und Properies können mit den Zusätzlichen \texttt{private, readonly} versehen
 \end{itemize}
 \begin{lstlisting}
-class Counter {
-  private _doors: number;
-  public static readonly WOOD = {
-   'oak': 80, 'pine': 20};
- constructor({doors = 2}: {doors?: number} = {}) {
-    this._doors = doors; }
-set doors(newDoorCount: number) {
-  if (newDoorCount >= Counter.MIN_DOOR_COUNT &&
-      newDoorCount <= Counter.MAX_DOOR_COUNT) {
-        this._doors = newDoorCount; }
-  else { throw 'Counter can only have ...'; }}
-get doors() {
-    return this._doors; } }
+class Octopus {
+    readonly numberOfLegs: number = 8;
+    constructor(private name: string = '') {}
+    set name(newName: string) {
+        this.name = newName; } } }
+\end{lstlisting}
+
+\subsubsection{Eigene Typen}
+\begin{lstlisting}
+type Shape =
+| { kind: "circle"; radius: number }
+| { kind: "rectangle"; w: number; h: number } 
+| { kind: "square"; size: number };
+
 \end{lstlisting}
 
 \subsubsection{Interfaces}
@@ -102,5 +104,8 @@ description: string, public likes?:number) { super(description); } }
 %TypeScript Klassendefinitionen lesen und in entsprechende Klassendefinitionen in EcmaScript-2015+ (ES6+) und ES5 konvertieren.
 
 %den Unterschied von Klassen und Interfaces (und Typen) und das Konzept des “Structural Typing“ in TypeScript erklären.
+
+\vfill
+$ $
 
 \columnbreak
