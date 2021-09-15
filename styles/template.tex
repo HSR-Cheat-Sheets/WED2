@@ -1,4 +1,4 @@
-\documentclass[a4paper, landscape , 8pt]{scrartcl}
+\documentclass[a4paper, landscape , 7pt]{scrartcl}
 
 % use language german
 \usepackage[T1]{fontenc}
@@ -68,7 +68,7 @@
 	\colorbox{subsectioncolor!80}{\parbox{0.98\linewidth}{\vspace{-1pt}\color{black}\ #1 \vspace{-2pt}}}}
 
 % Define SubSubsection Format
-\titleformat{name=\subsubsection}[block]{\sffamily\small}{}{0pt}{\colorsubsubsection}
+\titleformat{name=\subsubsection}[block]{\sffamily\footnotesize}{}{0pt}{\colorsubsubsection}
 \titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
 \newcommand{\colorsubsubsection}[1]{%
 	\colorbox{subsubsectioncolor!60}{\parbox{0.98\linewidth}{\vspace{-1pt}\color{black}\ #1 \vspace{-2pt}}}}
@@ -134,7 +134,7 @@ breakatwhitespace=true,                     % sets if automatic breaks should on
 frame=single,                               % showing frame outside code (none/leftline/topline/bottomline/lines/single/shadowbox)
 xleftmargin=3pt,
 xrightmargin=1pt,
-frameround=tttt,                            % enable round corners
+%frameround=tttt,                            % enable round corners
 rulecolor = \color{lightgray},              % Specify the colour of the frame-box
 aboveskip = 1pt,
 belowskip = 1pt,
@@ -150,7 +150,6 @@ captionpos = b                              % position of caption (t/b)
 	% {ä}{{\"a}}1
 	% {ö}{{\"o}}1}
 }
-
 
 
 

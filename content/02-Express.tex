@@ -3,40 +3,63 @@
 
 \section{Express}
 
-
 \subsection{Middleware}
 Express nutzt Middleware für die Request Bearbeitung. Middleware ist ein Stack von Anweisungen, welche für ein Request ausgeführt wird. Mit \texttt{app.use()} wird neue Middleware hinzugefügt.
+
+\subsubsection{index.js}
+Im index.js wird Middleware eingebunden, Routen zugewiesen, Server gestartet
 \begin{lstlisting}
-import http from "http";
-import express from "express";
+import express from 'express';
+import bodyParser from 'body-parser';
+import hbs from 'express-hbs';
+import path from 'path';
+import session from 'express-session';
+import {indexRoutes} from './routes/indexRoutes.js';
+
 const app = express();
-const server = http.createServer(app);
-const hostname = '127.0.0.1'; const port = '3000'; server.listen(port, hostname, () => { console.log('Running'); });
+app.engine('hbs', hbs.express4());
+app.set('view engine', 'hbs');
+app.set('views', path.resolve('views'));
+
+const router = express.Router();
+app.use(express.static(path.resolve('public')));
+app.use(session({secret: 'abc', resave: false, saveUninitialized: true}));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(indexRoutes);
+
+const hostname = '127.0.0.1'; const port = 3001;
+app.listen(); });
 \end{lstlisting}
 
 \subsubsection{Routing}
-Middleware befindet sich auf dem Express Objekt
+Routen ''zeigen'' auf Funktion im Controller
+% \begin{lstlisting}
+% import express from "express";
+% const router = express.Router;
+% \end{lstlisting}
 \begin{lstlisting}
-import express from "express";
-const router = express.Router;
+import express from 'express';
+const router = express.Router();
+import {indexController} from '../controller/indexController.js';
+router.get("/", indexController.index.bind(indexController));
+export const indexRoutes = router;
 \end{lstlisting}
 router.METHOD(path, [callback, \dots ] callback)  (METHOD : get, put, post, delete)
 \begin{lstlisting}
-router.get('/', function(req, res) {
-res.send('hello world'); });
+router.get('/', function(req, res) {res.send('hello');
 \end{lstlisting}
 Path zu verschiedenen Methoden gruppieren
-\begin{lstlisting}
-app.route('/book') // oder router.route(..)
-.get(function(req, res) {res.send('Get a book');})
-.post(function(req, res) {res.send('Add book');})
-\end{lstlisting}
+% \begin{lstlisting}
+% app.route('/book') // oder router.route(..)
+% .get(function(req, res) {res.send('Get a book');})
+% .post(function(req, res) {res.send('Add book');})
+% \end{lstlisting}
 
-\subsubsection{Body-Parser}
-\begin{lstlisting}
-import bodyParser from "body-parser";
-app.use(bodyParser.json());
-\end{lstlisting}
+% \subsubsection{Body-Parser}
+% \begin{lstlisting}
+% import bodyParser from "body-parser";
+% app.use(bodyParser.json());
+% \end{lstlisting}
 
 \subsubsection{Static}
 Statische Files ausliefern, mehrere möglich
@@ -44,27 +67,27 @@ Statische Files ausliefern, mehrere möglich
 app.use(express.static(__dirname + '/public'))
 \end{lstlisting}
 
-\subsubsection{Eigene Middleware}
-3 Parameter: request, response, next
-\begin{lstlisting}
-function myDummyLogger( options ){
-  options = options ? options : {};
-  return function myInnerLogger(req, res, next) {
-    console.log(req.method +":"+ req.url);
-    next(); } }
-app.use(myDummyLogger()); //Anwendung
-\end{lstlisting}
+% \subsubsection{Eigene Middleware}
+% 3 Parameter: request, response, next
+% \begin{lstlisting}
+% function myDummyLogger( options ){
+%   options = options ? options : {};
+%   return function myInnerLogger(req, res, next) {
+%     console.log(req.method +":"+ req.url);
+%     next(); } }
+% app.use(myDummyLogger()); //Anwendung
+% \end{lstlisting}
 
-\subsubsection{Error Middleware}
-\begin{itemize}
-    \item Bearbeitet Errors, welche von den Middlewares generiert wurden
-    \item Wird aufgerufen, falls Error-Objekt dem Next-Callback übergeben wird $\rightarrow$ keine normalen Middlewares mehr aufgerufen
-\end{itemize}
-\begin{lstlisting}
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');});
-\end{lstlisting}
+% \subsubsection{Error Middleware}
+% \begin{itemize}
+%     \item Bearbeitet Errors, welche von den Middlewares generiert wurden
+%     \item Wird aufgerufen, falls Error-Objekt dem Next-Callback übergeben wird $\rightarrow$ keine normalen Middlewares mehr aufgerufen
+% \end{itemize}
+% \begin{lstlisting}
+% app.use(function(err, req, res, next) {
+%   console.error(err.stack);
+%   res.status(500).send('Something broke!');});
+% \end{lstlisting}
 
 
 \subsection{Model (Daten \& Aufbereitung)}
@@ -76,12 +99,14 @@ import Datastore from "nedb";
 const db = new Datastore({ filename: './order.db', autoload: true });
 // insert
 db.insert(order, function(err, newDoc){
-if (callback){ callback(err, newDoc); } });
+  if (callback){ callback(err, newDoc); } });
 // search: findOne oder findAll
-db.findOne({ _id: id }, function (err, doc) { callback( err, doc); });
+  db.findOne({ _id: id }, 
+  function (err, doc) { callback( err, doc); });
 // update
-db.update({_id: id}, {$set: {"state": "DELETED"}}, {}, function (err, doc) {
-   publicGet(id,callback); });
+db.update({_id: id}, {$set: {"state": "DELETED"}}, 
+  {}, function (err, doc) {
+    publicGet(id,callback); });
 \end{lstlisting}
 
 
@@ -91,17 +116,46 @@ Express bietet eine render Methode an: app.render(view, [locals], callback). Kon
 app.set('view engine', 'hbs'); //Engine
 app.set('views', __dirname + '/views'); //Path
 \end{lstlisting}
-\subsubsection{Handlebars}
+\subsubsection{Handlebars (hbs)}
+% \begin{lstlisting}
+% hbs.registerHelper('if_eq', function(a,b,opts){ if(a===b){ return opts.fn(this); } else{return opts.inverse(this);}
+% })
+% // Verwendung im HTML
+% {{#if_eq state "OK"}}
+% {{ else }}
+% {{/ if_eq }}
+% \end{lstlisting}
 \begin{lstlisting}
-hbs.registerHelper('if_eq', function(a,b,opts){ if(a===b){ return opts.fn(this); } else{return opts.inverse(this);}
-})
-// Verwendung im HTML
-{{#if_eq state "OK"}}
-{{ else }}
-{{/ if_eq }}
+<html>
+<img src='/images/pizza.jpg'>
+{{#if isLoggedIn}}
+    <form action='/orders' method='get'>
+    <input type='submit' value='Order a Pizza'>
+    </form>
+{{else}}
+    <form action='/login' method='post'>
+      <input type="email" name="email" required>
+      <input type="submit" value="Login">
+    </form>{{/if}}</html>
+\end{lstlisting}
+\begin{lstlisting}
+<table>
+    <thead> <tr> <th>Bezeichnung</th> </tr> </thead>
+    <tbody> <tr> <td>{{ type }}</td> </tr> </tbody>
+</table>
 \end{lstlisting}
 
 
+\subsection{Controller}
+Controller ist für die Logik da, wird beim aufrufen einer Route ausgeführt. Holt sich Daten im Model
+\begin{lstlisting}
+import {orderStore} from '../services/orderStore.js'
+export class OrdersController {
+    async showOrder(req, res) {
+        res.render("showorder", 
+        await orderStore.get(req.params.id)); };}
+export const ordersController = new OrdersController()
+\end{lstlisting}
 
 \subsection{Session \& Cookie}
 Beim ersten Connect vom Client wird eine Session-Id erstellt und als Cookie zum Client geschickt. Session-Data wird auf dem Server abgespeichert $\rightarrow$ wiederspricht REST
@@ -134,5 +188,6 @@ Server kann keine Nachricht an den Client schicken /
 Jede Anfrage öffnete eine neue Verbindung $\rightarrow$ erschwert es real-time Apps z.B. Games\\
 \textbf{Lösung:} WebSockets ermöglicht ''bi-directional'', ''always-on'' Kommunikation
 
-
+\vfill
+$ $ 
 \columnbreak

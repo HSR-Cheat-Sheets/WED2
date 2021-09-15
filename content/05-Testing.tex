@@ -8,24 +8,21 @@
 % die Einsatzzweck unterschiedlicher Testarten erklären (z.B. Integration, Regression, Load (Stress), Performance, Endurance Test, Chaos Testing, Security Tests, Usability Test).
 % Unit-Tests von Integration-Tests und System-Tests unterscheiden.
 \textbf{Unit Tests:} Getestet werden einzelne Klassen, Module
-\textbf{Integrationstests:} Zusammenspiel 2 oder mehr "Units"
+\textbf{Integrationstests:} Zusammenspiel 2 oder mehr ''Units''
 \textbf{Funktionstests:} System entsprechend spezifizierte funktionale Anforderungen verhält
 \textbf{Regressionstests:} Veränderungen im Code zu (unerwarteten) Änderungen im Verhalten
 \textbf{Funktionale Systemtests:} Zusammenspiel aller Systemkomponenten in der Zielumgebung
 \textbf{Weitere:} Load (Stress), Performance, Endurance Test (über 3h), Chaos Testing (Wartung/Ausfall), Security Tests, Usability Test
 
 % beschreiben was in den Phasen (Setup, Exercise, Verify, Teardown) eines Test passiert.
-\vspace{-8pt}
-\begin{center}
-    \includegraphics[width=\linewidth]{graphic/testing/Unit-Testing.png}
-\end{center}
+    \hspace{-6pt} \includegraphics[scale=.237]{graphic/testing/Unit-Testing.png}
 \vspace{-8pt}
 
 \subsection{Tools}
 % je zwei JavaScript Testrunner und Assertion-Libraries aufzählen.
 % die Aufgaben von JavaScript Testrunner und Assertion-Libraries nennen
 \begin{itemize}
-    \item \textbf{Test-Runner:} Ein Rahmen der Tests entgegennimmt, ausführt und die Resultate anzeigt (Mocha, Jest)
+    \item \textbf{Test-Runner:} Rahmen der Tests entgegennimmt, ausführt und Resultate (Mocha, Jest)
     \item \textbf{Assertion Library:} Code zur Ausführung einzelner Tests (Chai, Assert)
 \end{itemize}
 
@@ -40,32 +37,61 @@
 
 
 % einen einfachen Unit Test mit dem Mocha und Chai API schreiben.
-\subsubsection{Mocha API}
+
+Testaufbau immer gleich:
+\begin{lstlisting} 
+describe( 'Array', function() {
+  describe('#indexOf()', function() {
+    beforeEach(function() {
+      this.testArray = [1, 2, 3]; });
+\end{lstlisting}
+\subsubsection{Assert API}
 \begin{lstlisting}
 const assert =  require('assert');
-describe( 'Array', function() {
- describe('#indexOf()', function() {
-  beforeEach(function() {
-   this.testArray = [1, 2, 3]; });
-    it('should return -1 when the value is not present',
-     function() {
-      assert.strictEqual(this.testArray.indexOf(4),
-       -3); /*should be -1*/ }); });});
+// Testaufbau
+    it('should return -3', function() {
+      assert.strictEqual(this.testArray.indexOf(4),-3);
 \end{lstlisting}
-
 \subsubsection{Chai API}
 \begin{lstlisting}
 const {expect} =  require('chai');
-describe( 'Array', function() {
- describe('#indexOf()', function() {
-  beforeEach(function() {
-   this.testArray = [1, 2, 3]; });
-    it('should return -1 when the value is not present',
-     function() {
+// Testaufbau
+    it('should return -3', function() {
       expect(this.testArray.indexOf(4)).to.equal(-3);
-       });});});
 \end{lstlisting}
 
+
+\subsection{Mock Tests with Sinon}
+\begin{lstlisting}
+const { expect } = require("chai");
+const sinon = require("sinon");
+describe("A new transaction", function() { 
+  const constantNow = new Date().getTime(); let clock;
+  beforeEach(() => {
+    clock = sinon.useFakeTimers(constantNow);});//fake
+  afterEach(() => { clock.restore(); });
+  it("has current date", function() { 
+    const transaction = new Transaction({}, {}, 25); 
+    expect(transaction.date).to.equal(constantNow);
+\end{lstlisting}
+
+
+\begin{lstlisting}
+// Imports...
+const transactionAmount = 25;
+describe("A new transaction executed", function() { 
+  beforeEach(function() {
+    this.accountA = new BankAccount();
+    this.accountB = new BankAccount();
+    this.accountAMock = sinon.mock(this.accountA);
+    this.accountAMock.expects("withdraw")
+        .withArgs(transactionAmount);
+    this.transaction = new Transaction(this.accountA, this.accountB, transactionAmount); });
+  it("correctly calls withdrawal", function() { 
+    this.transaction.execute();
+    this.accountAMock.verify(); }); });
+    \end{lstlisting}
+    
 
 \subsection{Unit Test Smells}
 % Test-Smells erkennen und Refactorings zur Verbesserung der Tests durchführen.
@@ -80,13 +106,4 @@ Probleme: Tests die...
 \end{itemize}
 
 
-
 \columnbreak
-
-
-
-
-
-
-
-
